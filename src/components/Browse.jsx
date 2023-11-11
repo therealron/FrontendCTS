@@ -4,8 +4,9 @@ const HomePage = () => {
   return (
     <div className="bg-amazonclone-background">
       <div className="min-w-[1000px] max-w-[1500px] m-auto">
-        <Carousel />
-        <div className="grid grid-cols-3 xl:grid-cols-4 -mt-80">
+        {/* <Carousel /> */}
+
+        <div className="grid grid-cols-3 xl:grid-cols-4 mt-20">
           <HomePageCard
             title={'We have a surprise for you'}
             img={'../images/home_grid_1.jpg'}
