@@ -37,25 +37,23 @@ const formatDate = (date) => {
   return new Date(date).toLocaleString() // Formats date according to local conventions
 }
 
-export const Post = () => {
-  // post = curr_post
-
+export const SubmissionPost = () => {
   const [comments, setComments] = useState([])
 
-  const { post_id } = useParams()
+  const { sub_id } = useParams()
   const { user } = useContext(AuthContext)
   const [Like, setLike] = useState(0)
-  const [isLiked, setIsLiked] = useState(false)
+
   const [volunteer, setVolunteer] = useState(false)
   const [runUseEffect, setUseEffect] = useState(false)
+  const [likedArray, setLikedArray] = useState([])
+  const [isLiked, setIsLiked] = useState(false)
+  const [numUpVotes, setNumUpVotes] = useState(0)
 
   const [post, setPost] = useState({})
   useEffect(() => {
-    // Make an Axios GET request to fetch and sort the posts
-    // console.log(BASE_URL + `posts/get/${post_id}`)
-
     axios
-      .get(BASE_URL + `posts/${post_id}`) // Use the actual endpoint URL
+      .get(BASE_URL + `competition/${sub_id}/submission`) // Use the actual endpoint URL
       .then((response) => {
         console.log('response = ', response.data)
         // setPost(response.data)
@@ -64,24 +62,9 @@ export const Post = () => {
         console.log('posts = ' + fetchedData)
 
         if (fetchedData.likes) {
-          setLike(fetchedData.likes.length)
+          setNumUpVotes(fetchedData.likes.length)
         }
 
-        if (post.users_volunteer_to_build) {
-          setVolunteer(fetchedData.users_volunteer_to_build.includes(user._id))
-        }
-        // console.log(
-        //   'post.users_volunteer_to_build.includes(user._id) = ',
-        //   post?.users_volunteer_to_build.includes(user._id)
-        // )
-
-        // console.log(post?.likes.includes(user._id))
-
-        // console.log('isLiked = ' + isLiked)
-        // console.log('post.likes = ' + post)
-        // console.log(fetchedData.likes)
-        // console.log(fetchedData._id)
-        // console.log(fetchedData.likes.includes(user._id))
         setComments(fetchedData.comments)
 
         if (fetchedData.likes) {
@@ -102,33 +85,40 @@ export const Post = () => {
     // setCommentBody('')
   }
 
-  const upvoteHandler = async (e) => {
+  const upvoteHandler = async () => {
+    setLikedArray([...likedArray, sub_id])
+    if (isLiked) {
+      setNumUpVotes(numUpVotes - 1)
+    } else {
+      setNumUpVotes(numUpVotes + 1)
+    }
     setIsLiked(!isLiked)
-
     try {
-      await axios.put(BASE_URL + 'posts/' + post_id + '/like', {
+      await axios.put(BASE_URL + 'competition/' + sub_id + '/upvote', {
         userId: user._id,
       })
-      setUseEffect(!runUseEffect)
+      console.log(likedArray)
+      // setUseEffect(!runUseEffect)
     } catch (err) {}
   }
 
-  const trytobuildhandler = (e) => {
-    // requests_volunteered_to_build
-    setVolunteer(!volunteer)
-    try {
-      axios.put(BASE_URL + 'posts/' + post_id + '/volunteer', {
-        userId: user._id,
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  //   const trytobuildhandler = (e) => {
+  //     // requests_volunteered_to_build
+  //     setVolunteer(!volunteer)
+  //     try {
+  //       axios.put(BASE_URL + 'posts/' + sub_id + '/volunteer', {
+  //         userId: user._id,
+  //       })
+  //     } catch (err) {
+  //       console.log(err)
+  //     }
+  //   }
 
   const commentHandler = async (commentBody) => {
+    if (commentBody.trim() === '') return
     try {
       const commentData = {
-        postUserId: post_id,
+        postUserId: sub_id,
         comment_body: commentBody,
         commenterUserId: user._id,
         commenterUsername: user.username,
@@ -143,12 +133,12 @@ export const Post = () => {
       }
 
       const res = await axios.post(
-        BASE_URL + 'posts/' + post_id + '/comment',
+        BASE_URL + 'competition/' + sub_id + '/comment',
         commentData
       )
-      console.log('runUseEffect = ' + runUseEffect)
+      //   console.log('runUseEffect = ' + runUseEffect)
       setUseEffect(!runUseEffect)
-      console.log('runUseEffect = ' + runUseEffect)
+      //   console.log('runUseEffect = ' + runUseEffect)
     } catch (err) {
       console.log(err)
     }
@@ -159,44 +149,18 @@ export const Post = () => {
     <div className="flex flex-col ">
       <div className="flex flex-col gap-3 w-screen p-6">
         <span className="text-3xl font-bold mb-4 border-b-2 pb-2">
-          Title: {post?.title}
+          {post?.name}
           {/* {post_id} */}
         </span>
         <div className="border rounded p-4 border-b-2">
           <>
-            <span className="text-m font-bold">
-              Description:
-              {/* {post_id} */}
-            </span>
+            <span className="text-m font-bold">{/* {post_id} */}</span>
             <p className="text-gray-700 text-m pb-10 pl-5 leading-relaxed border-b-2">
               {post?.desc}
             </p>
           </>
-          <>
-            <span className="text-m font-bold mt-2">
-              Example Input Prompt:
-              {/* {post_id} */}
-            </span>
-            <p className="text-gray-700 text-m pb-10 pl-5 leading-relaxed border-b-2">
-              {post?.examplePrompt}
-            </p>
-          </>
-          <>
-            {post.ambiguities !== '' ? (
-              <>
-                <span className="text-m font-bold">
-                  How to evaluate performance?
-                </span>
-                <p className="text-gray-700 text-lg pb-10 pl-5 leading-relaxed border-b-2">
-                  {post?.performanceField}
-                </p>
-              </>
-            ) : (
-              <></>
-            )}
-          </>
 
-          <>
+          {/* <>
             {post.performance !== '' ? (
               <>
                 <span className="text-m font-bold">
@@ -211,9 +175,9 @@ export const Post = () => {
                 <div></div>
               </>
             )}
-          </>
+          </> */}
 
-          <>
+          {/* <>
             {post.reason !== '' ? (
               <>
                 <span className="text-m font-bold">
@@ -226,28 +190,30 @@ export const Post = () => {
             ) : (
               <></>
             )}
-          </>
+          </> */}
           <div>{Like ? <span>{Like} upvote(s)</span> : <></>}</div>
           <div>
             {!isLiked ? (
               <>
                 <button
-                  className="bg-teal-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-gray-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded block"
                   onClick={upvoteHandler}
                 >
                   <HandThumbUpIcon className="w-5 h-5 inline-block mr-1" />
                   Upvote
                 </button>{' '}
+                <div className="text-sm ">{numUpVotes} Upvotes</div>
               </>
             ) : (
               <>
                 <button
-                  className="bg-indigo-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded block"
                   onClick={upvoteHandler}
                 >
                   <HandThumbUpIcon className="w-5 h-5 inline-block mr-1" />
                   Upvoted
                 </button>
+                <div className="text-sm ">{numUpVotes} Upvotes</div>
               </>
             )}
 
@@ -271,12 +237,12 @@ export const Post = () => {
               </>
             )} */}
 
-            {volunteer ? (
+            {/* {volunteer ? (
               <>
                 <Link to="/createstart">
                   <button
                     className="bg-teal-300 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2"
-                    onClick={trytobuildhandler}
+                    // onClick={trytobuildhandler}
                   >
                     Build Now?
                   </button>
@@ -284,10 +250,11 @@ export const Post = () => {
               </>
             ) : (
               <></>
-            )}
+            )} */}
           </div>
           <div className="flex flex-col gap-3  p-6">
             <CommentInput commentHandler={commentHandler} />
+            {/* <CommentInput /> */}
 
             <div className=" flex flex-col gap-3 p-6 ">
               {/* {post.comments} */}
@@ -351,7 +318,6 @@ const CommentItem = ({ comment, runUseEffect, setUseEffect }) => {
 
   const deleteCommentHandler = async () => {
     try {
-      console.log('comment = ' + comment._id)
       const commentData = {
         userId: user._id,
         username: user.username,
@@ -359,10 +325,10 @@ const CommentItem = ({ comment, runUseEffect, setUseEffect }) => {
       }
 
       const res = await axios.delete(
-        BASE_URL + 'posts/' + comment.postUserId + '/comment',
+        BASE_URL + 'competition/' + comment.postUserId + '/comment',
         { data: commentData }
       )
-      console.log(res)
+
       setUseEffect(!runUseEffect)
     } catch (err) {
       console.log(err)
@@ -418,4 +384,4 @@ const CommentItem = ({ comment, runUseEffect, setUseEffect }) => {
   )
 }
 
-export default Post
+export default SubmissionPost

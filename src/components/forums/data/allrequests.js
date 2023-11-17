@@ -32,5 +32,5 @@ const post3 = {
   comments: [],
 }
 
-export const allposts = [post1, post2, post3, post1, post2, post3]
+export const allposts = []
 export default allposts

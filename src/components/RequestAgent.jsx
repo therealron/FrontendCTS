@@ -65,7 +65,7 @@ export default function RequestAgent() {
         <div className="bg-white  rounded-lg shadow-md w-full p-10 py-10">
           <textarea
             className="w-full text-2xl font-semibold mb-4 border-gray-300"
-            placeholder="Type a one line summary or title of your agent"
+            placeholder="Type a one line summary or title of your competition"
             onChange={(e) => setTitleText(e.target.value)}
           ></textarea>
           <form onSubmit={handleRequestSubmit}>

@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import './register.css'
 import { useNavigate } from 'react-router'
 import { BASE_URL } from '../utils/constants'
+import { Link } from 'react-router-dom'
 
 export default function Register() {
   const username = useRef()
@@ -35,10 +36,8 @@ export default function Register() {
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">Lamasocial</h3>
-          <span className="loginDesc">
-            Connect with friends and the world around you on Lamasocial.
-          </span>
+          <h3 className="loginLogo text-indigo-500">Unipeat beta</h3>
+          <span className="loginDesc">Kaggle for LLM Agents!</span>
         </div>
         <div className="loginRight">
           <form className="loginBox" onSubmit={handleClick}>
@@ -61,7 +60,7 @@ export default function Register() {
               ref={password}
               className="loginInput"
               type="password"
-              minLength="6"
+              minLength="3"
             />
             <input
               placeholder="Password Again"
@@ -69,13 +68,23 @@ export default function Register() {
               ref={passwordAgain}
               className="loginInput"
               type="password"
-              minLength="6"
+              minLength="3"
             />
-            <button className="loginButton" type="submit">
+            {/* <button className="loginButton" type="submit"> */}
+            <button
+              className="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="submit"
+            >
               Sign Up
             </button>
-            <button className="loginRegisterButton">Log into Account</button>
           </form>
+          <div>
+            <Link to="/login">
+              <button className="bg-green-500 w-full text-white active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                Log into Account
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
