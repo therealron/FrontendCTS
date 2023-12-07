@@ -62,7 +62,7 @@ export const Discussion = ({ comp_id }) => {
   // )
   return (
     <div>
-      Discussion forum will go live on 3rd Decemeber. Till then please start
+      Discussion forum will go live on 3rd January. Till then please start
       submitting solutions to the best of your understanding. Sorry for the
       inconvenience :)
     </div>

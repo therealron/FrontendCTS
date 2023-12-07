@@ -3,7 +3,7 @@ import React from 'react'
 export const Leaderboard = () => {
   return (
     <div>
-      Leaderboard will go live on 3rd December. Your early submissions will also
+      Leaderboard will go live on 3rd January. Your early submissions will also
       be listed then ;)
     </div>
   )
