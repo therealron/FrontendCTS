@@ -41,7 +41,7 @@ const NavBar = () => {
             />
           </Link>
 
-          <div
+          {/* <div
             onClick={handleSuggestRequestNavigation}
             className="pr-4 pl-4 cursor-pointer"
           >
@@ -49,16 +49,14 @@ const NavBar = () => {
               <div className="text-xs xl:text-sm">Suggest a </div>
               <div className="text-sm xl:text-base font-bold">competition?</div>
             </div>
-          </div>
+          </div> */}
         </div>
         {/* Middle */}
         <div className="flex items-center mx-auto  grow">
           {/* <Search /> */}
           {/* <h2 className="text-3xl font-bold text-indigo-500 mb-2"> */}
 
-          <div className="ml-[30%] text-green-500 ">
-            Our First competition is now live! :)
-          </div>
+          <div className="ml-auto  ">Explore!</div>
 
           {/* </h2> */}
         </div>

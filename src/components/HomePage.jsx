@@ -5,231 +5,196 @@ import {
   CarouselProduct,
   HowDoesItWorkCard,
 } from './'
-
-// const HomePage = () => {
-//   return (
-//     <div className="bg-amazonclone-background">
-//       <div className="min-w-[1000px] max-w-[1500px] m-auto">
-//         {/* <Carousel /> */}
-//         <div>
-//           {/* <div className="grid grid-cols-1 xl:grid-cols-3 -mt-80"> */}
-//           <div className="grid grid-cols-1 xl:grid-cols-3 mt-20">
-//             <CompetitionCard
-//               title={'Summarize Israel-Palestine Conflict'}
-//               type={'Open-ended'}
-//               isLive={true}
-//               img={'../images/Israel_Palestine_conflict.png'}
-//               link={'See terms and conditions'}
-//             />
-//             <CompetitionCard
-//               title={'Watch The Rings of Power'}
-//               type={'Open-ended'}
-//               isLive={false}
-//               img={'../images/home_grid_2.jpg'}
-//               link={'Start streaming now'}
-//             />
-//             <CompetitionCard
-//               title={'Unlimited Streaming'}
-//               type={'Open-ended'}
-//               isLive={false}
-//               img={'../images/home_grid_3.jpg'}
-//               link={'Find out more'}
-//             />
-//             {/* <CompetitionCard
-//               title={'More titles to explore'}
-//               type={'Open-ended'}
-//               isLive={false}
-//               img={'../images/home_grid_4.jpg'}
-//               link={'Browse Kindle Unlimited'}
-//             /> */}
-//             {/* <CompetitionCard
-//             title={'Shop Pet Supplies'}
-//             img={'../images/home_grid_5.jpg'}
-//             link={'See more'}
-//           />
-//           <CompetitionCard
-//             title={'Spring Sale'}
-//             img={'../images/home_grid_6.jpg'}
-//             link={'See the deals'}
-//           />
-//           <CompetitionCard
-//             title={'Echo Buds'}
-//             img={'../images/home_grid_7.jpg'}
-//             link={'See more'}
-//           />
-//           <CompetitionCard
-//             title={'Family Plan: 3 months free'}
-//             img={'../images/home_grid_8.jpg'}
-//             link={'Learn more'}
-//           /> */}
-//             <div className="m-3 pt-8">
-//               <img
-//                 className="xl:hidden"
-//                 src={'../images/banner_image_2.jpg'}
-//                 alt="Banner 2"
-//               />
-//             </div>
-//           </div>
-//         </div>
-//         {/* <CarouselProduct /> */}
-//         {/* <CarouselCategory /> */}
-//         <div className="h-[200px]">
-//           <img
-//             className="h-[100%] m-auto"
-//             src={'../images/banner_image.jpg'}
-//             alt="Banner 1"
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const HomePage = () => {
+  const [text, setText] = useState('')
+  const [rows, setRows] = useState(2)
+
+  const handleChange = (event) => {
+    const textareaLineHeight = 24 // Adjust the line height based on your styling
+    const previousRows = event.target.rows
+    event.target.rows = 2 // Reset number of rows in textarea
+
+    const currentRows = Math.floor(
+      event.target.scrollHeight / textareaLineHeight
+    )
+
+    if (currentRows === previousRows) {
+      event.target.rows = currentRows
+    }
+
+    if (currentRows >= rows) {
+      setRows(currentRows)
+    }
+
+    setText(event.target.value)
+  }
+
+  const [status, setStatus] = useState('')
+
+  useEffect(() => {
+    const eventSource = new EventSource('http://127.0.0.1:8000/status/')
+    eventSource.onmessage = (event) => {
+      setStatus(event.data)
+    }
+    return () => {
+      eventSource.close()
+    }
+  }, [])
+
+  const startProcess = async () => {
+    // const response = await axios.post('http://127.0.0.1:8000/start-process/')
+    // console.log(response.data)
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/start-process/')
+      console.log(response.data)
+    } catch (error) {
+      // Handle the error here
+      // For example, log it or set an error state
+      console.error('An error occurred while starting the process:', error)
+      // If error.response exists, it means the request was made and the server responded
+      if (error.response) {
+        console.error(
+          'Server responded with a status code that falls out of the range of 2xx:',
+          error.response.status
+        )
+        console.error('Response data:', error.response.data)
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error(
+          'The request was made but no response was received:',
+          error.request
+        )
+      } else {
+        // Something happened in setting up the request that triggered an error
+        console.error('Error setting up the request:', error.message)
+      }
+    }
+  }
+
   return (
-    <div className="font-sans text-gray-800">
-      {/* Header Section */}
-
-      {/* Hero Section */}
-      {/* <section className="text-center p-8 ">
-        <h1 className="text-4xl font-bold mb-2 text-indigo-500">
-          Kaggle for AI Agents!
-        </h1>
-        <h1 className="text-2xl font-bold mb-2 text-green-500">
-          Compete for a cash prize
-        </h1>
-        
-      </section> */}
-      <section className="text-center p-8 bg-gradient-to-r from-indigo-500 to-teal-500 text-white">
-        <h1 className="text-5xl font-extrabold mb-4 ">Kaggle for AI Agents!</h1>
-        <h2 className="text-3xl font-semibold mb-6 ">
-          Compete for a Cash Prize
-        </h2>
-      </section>
-      <section className="text-center p-8 bg-gray-50">
-        <h2 className="text-4xl font-bold mb-4 text-indigo-500">
-          Why? To Tackle the Challenges Beyond Today's AI Limits.
-        </h2>
-        <p className="text-xl mb-6 text-gray-700"></p>
-      </section>
-
-      {/* <section className="text-center p-8 bg-gray-300">
-        <h2 className="text-3xl font-bold text-indigo-500 mb-2">
-          Unipeat: Kaggle for AI Agents!
-        </h2>
-        <p className="text-teal-500 mb-4">
-          Join AI Arena today and be part of the next wave of AI innovation.
+    <div className="bg-gradient-to-r from-purple-500 to-indigo-600 h-screen flex flex-col justify-center items-center text-white">
+      {/* <header className="text-4xl font-bold mb-6">
+        <h1>REQAPOD</h1>
+        <p className="text-xl font-light">REQuest A PODcast</p>
+      </header> */}
+      {/* <header
+        className="text-4xl font-bold mb-6"
+        style={{ fontFamily: "'Montserrat', sans-serif" }}
+      >
+        <h1>REQAPOD</h1>
+        <p
+          className="text-xl font-light"
+          style={{ fontFamily: "'Raleway', sans-serif" }}
+        >
+          REQuest A PODcast
         </p>
-        <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-semibold rounded px-4 py-2 transition duration-300 ease-in-out transform hover:scale-105">
-          Get Started
+      </header> */}
+      {/* <header
+        className="text-4xl font-bold mb-6"
+        style={{ fontFamily: "'Roboto Slab', serif" }}
+      >
+        <h1>REQAPOD</h1>
+        <p
+          className="text-xl font-light"
+          style={{ fontFamily: "'Lato', sans-serif" }}
+        >
+          REQuest A PODcast
+        </p>
+      </header> */}
+      {/* <header className="text-center mb-10">
+        <h1
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: '60px',
+            fontWeight: '700',
+            color: 'white',
+          }}
+        >
+          REQAPOD
+        </h1>
+        <p
+          style={{
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '24px',
+            fontWeight: '300',
+            color: 'white',
+            marginTop: '4px',
+          }}
+        >
+          REQuest A PODcast
+        </p>
+        <p
+          style={{
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '22px',
+            fontWeight: '400',
+            color: 'white',
+            marginTop: '8px',
+          }}
+        >
+          Create an AI Generated Podcast in One-Click
+        </p>
+      </header> */}
+      <header className="text-center mb-10">
+        <h1
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: '60px',
+            fontWeight: '700',
+            color: 'white',
+          }}
+        >
+          REQAPOD
+        </h1>
+        <p
+          style={{
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '15px',
+            fontWeight: '300',
+            color: '#d1d1d1',
+            marginTop: '0',
+          }}
+        >
+          REQuest A PODcast
+        </p>
+        <p
+          style={{
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '22px',
+            fontWeight: '400',
+            color: 'white',
+            marginTop: '8px',
+          }}
+        >
+          Create an AI Generated Podcast in One-Click
+        </p>
+      </header>
+
+      <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg w-1/2">
+        <textarea
+          value={text}
+          rows={rows}
+          placeholder="eg. Name 5 companies that failed even after raising more than a billion dollars. For each of them, explain what went wrong and what they could have done differently."
+          className="p-4 w-full border border-gray-200 rounded resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          onChange={handleChange}
+        />
+        <button className="px-5 py-2.5 bg-teal-400 text-white rounded cursor-pointer hover:bg-indigo-600 mt-4 block w-full transition duration-300 ease-in-out">
+          make this a pod ;)
         </button>
-      </section> */}
-      {/* Why AI Arena? */}
-      {/* ... Similar structure for the 'Why AI Arena?' section ... */}
 
-      {/* How It Works */}
-      {/* ... Similar structure for the 'How It Works' section ... */}
-
-      {/* Testimonials */}
-      {/* ... Similar structure for the 'Testimonials' section ... */}
-
-      {/* CTA Section */}
-      {/* <section className="text-center p-8 bg-gray-50 border-b-2">
-        <h2 className="text-3xl font-bold mb-2 text-green-500">
-          Our first Competition is Live!
-        </h2>
-        <div className="grid grid-cols-1 xl:grid-cols-2 ">
-          <CompetitionCard
-            title={'AI Summary of Israel-Palestine Conflict'}
-            type={'Open-ended'}
-            isLive={true}
-            img={'../images/Israel_Palestine_conflict.png'}
-            link={'See terms and conditions'}
-          />
-          <HowDoesItWorkCard
-            title={'AI Summary of Israel-Palestine Conflict'}
-            type={'Open-ended'}
-            isLive={true}
-            img={'../images/Israel_Palestine_conflict.png'}
-            link={'See terms and conditions'}
-          />
-        </div>
-      </section>C */}
-      <section className="p-8 bg-gray-50 border-b-2">
-        <div className="flex flex-col xl:flex-row items-center xl:items-start justify-between pb-4 border-b-2">
-          {/* Left Column: Headline and Description */}
-          <div className="xl:w-1/2 mb-8 xl:mb-0 ">
-            <h2 className="text-4xl font-bold mb-4 text-indigo-600">
-              Our First Competition is Live!
-            </h2>
-            <p className="text-lg text-gray-600">
-              Join us in the "Nuanced Summary of the Israel-Palestine Conflict"
-              competition. Showcase your AI agent's capabilities and compete for
-              exciting prizes!
-            </p>
-          </div>
-
-          {/* Right Column: Competition Card */}
-          <div className="xl:w-1/2 flex justify-center xl:justify-end">
-            <CompetitionCard
-              title={'Nuanced Summary of Israel-Palestine Conflict'}
-              type={'Open-ended'}
-              isLive={true}
-              img={'../images/Israel_Palestine_conflict.png'}
-              link={'See terms and conditions'}
-            />
-          </div>
-        </div>
-
-        {/* How Does It Work Card - Centered Below */}
-        <div className="mt-8">
-          <HowDoesItWorkCard
-            title={'AI Summary of Israel-Palestine Conflict'}
-            type={'Open-ended'}
-            isLive={true}
-            img={'../images/Israel_Palestine_conflict.png'}
-            link={'See terms and conditions'}
-          />
-        </div>
-      </section>
-      <div className="min-w-[1000px] max-w-[1500px] m-auto">
-        {/* <Carousel /> */}
-
-        <section className="text-center p-8 ">
-          <h2 className="text-3xl font-bold text-black-500 mb-2">
-            Competitions
-          </h2>
-          <div>
-            {/* <div className="grid grid-cols-1 xl:grid-cols-3 -mt-80"> */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 ">
-              <CompetitionCard
-                title={'Nuanced Summary of Israel-Palestine Conflict'}
-                type={'Open-ended'}
-                isLive={true}
-                img={'../images/Israel_Palestine_conflict.png'}
-                link={'See terms and conditions'}
-              />
-              <CompetitionCard
-                title={'Job Searching Agent'}
-                type={'Close-ended'}
-                isLive={false}
-                img={'../images/job_searching_agent.png'}
-                link={'Start streaming now'}
-              />
-              <CompetitionCard
-                title={'Flight Booking Agent'}
-                type={'Close-Ended'}
-                isLive={false}
-                img={'../images/flight_search_agent.png'}
-                link={'Find out more'}
-              />
-            </div>
-          </div>
-        </section>
+        {/* <div>
+          <button
+            onClick={startProcess}
+            className="px-5 py-2.5 bg-indigo-500 text-white rounded cursor-pointer hover:bg-indigo-600 mt-4 block w-full transition duration-300 ease-in-out"
+          >
+            Start Process
+          </button>
+          <p>Status: {status}</p>
+        </div> */}
       </div>
-
-      {/* Footer */}
-      <footer className="p-4  text-center">{/* Footer Content */}</footer>
     </div>
   )
 }
