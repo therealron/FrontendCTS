@@ -52,17 +52,12 @@ const NavBar = () => {
           </div> */}
         </div>
         {/* Middle */}
-        <div className="flex items-center mx-auto  grow">
-          {/* <Search /> */}
-          {/* <h2 className="text-3xl font-bold text-indigo-500 mb-2"> */}
-
+        {/* <div className="flex items-center mx-auto  grow">
           <div className="ml-auto  ">Explore!</div>
-
-          {/* </h2> */}
-        </div>
+        </div> */}
         {/* Right */}
 
-        <div className="flex items-center m-4">
+        <div className="flex items-center m-4 ml-auto">
           {/* <Link to={'/browse'}>
             <div className="pr-4 pl-4">
           
@@ -88,7 +83,7 @@ const NavBar = () => {
             </div>
           </Link> */}
           {/* <Link to={'/checkout'}> */}
-          <div className="flex pr-4 pl-4">
+          <div className="flex pr-4 pl-4 ">
             {/* <ShoppingCartIcon className="h-[48px]" /> */}
             {/* <div className="relative">
                 <div className="absolute right-[9px] font-bold m-2 text-orange-400">

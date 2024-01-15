@@ -48,7 +48,14 @@ const HomePage = () => {
     // const response = await axios.post('http://127.0.0.1:8000/start-process/')
     // console.log(response.data)
     try {
-      const response = await axios.post('http://127.0.0.1:8000/start-process/')
+      const requestData = {
+        query: text,
+        // another_field: 123,
+      }
+      const response = await axios.post(
+        'http://127.0.0.1:8000/start-process/',
+        requestData
+      )
       console.log(response.data)
     } catch (error) {
       // Handle the error here
@@ -138,42 +145,34 @@ const HomePage = () => {
           Create an AI Generated Podcast in One-Click
         </p>
       </header> */}
-      <header className="text-center mb-10">
-        <h1
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: '60px',
-            fontWeight: '700',
-            color: 'white',
-          }}
-        >
+      <header className="text-center mb-6 md:mb-10">
+        <h1 className="font-playfair text-4xl md:text-6xl font-bold text-white leading-none">
           REQAPOD
         </h1>
-        <p
-          style={{
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '15px',
-            fontWeight: '300',
-            color: '#d1d1d1',
-            marginTop: '0',
-          }}
-        >
+        <p className="font-open-sans text-xs md:text-sm text-teal-500 mt-2">
           REQuest A PODcast
         </p>
-        <p
-          style={{
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '22px',
-            fontWeight: '400',
-            color: 'white',
-            marginTop: '8px',
-          }}
-        >
+        <p className="font-open-sans text-sm md:text-lg text-white mt-2">
           Create an AI Generated Podcast in One-Click
         </p>
       </header>
+      <div className="p-4 md:p-8 bg-white text-gray-800 rounded-lg shadow-lg w-full md:w-1/2">
+        <textarea
+          value={text}
+          rows={rows}
+          placeholder="eg. Name 5 companies that failed even after raising more than a billion dollars. For each of them, explain what went wrong and what they could have done differently."
+          className="p-2 md:p-4 w-full border border-gray-200 rounded resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          onChange={handleChange}
+        />
+        <button
+          className="px-4 md:px-5 py-2 text-sm md:text-base bg-teal-400 text-white rounded cursor-pointer hover:bg-indigo-600 mt-4 block w-full transition duration-300 ease-in-out"
+          onClick={startProcess}
+        >
+          make this a pod ;)
+        </button>
+      </div>
 
-      <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg w-1/2">
+      {/* <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg w-1/2">
         <textarea
           value={text}
           rows={rows}
@@ -181,11 +180,14 @@ const HomePage = () => {
           className="p-4 w-full border border-gray-200 rounded resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500"
           onChange={handleChange}
         />
-        <button className="px-5 py-2.5 bg-teal-400 text-white rounded cursor-pointer hover:bg-indigo-600 mt-4 block w-full transition duration-300 ease-in-out">
+        <button
+          className="px-5 py-2.5 bg-teal-400 text-white rounded cursor-pointer hover:bg-indigo-600 mt-4 block w-full transition duration-300 ease-in-out"
+          onClick={startProcess}
+        >
           make this a pod ;)
-        </button>
+        </button> */}
 
-        {/* <div>
+      {/* <div>
           <button
             onClick={startProcess}
             className="px-5 py-2.5 bg-indigo-500 text-white rounded cursor-pointer hover:bg-indigo-600 mt-4 block w-full transition duration-300 ease-in-out"
@@ -194,7 +196,7 @@ const HomePage = () => {
           </button>
           <p>Status: {status}</p>
         </div> */}
-      </div>
+      {/* </div> */}
     </div>
   )
 }
